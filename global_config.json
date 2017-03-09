@@ -1,5 +1,10 @@
 {
-    "raid": "/Volumes/ProjectsRaid",
-    "working_projects": "WorkingProjects",
-	"pipeline":	"x_Pipeline"
+    "project drive": "/Volumes/ProjectsRaid",
+    "projects location": "WorkingProjects",
+	"pipeline location": "x_Pipeline",
+    "project config name": "project_config.json",
+    "clients": {
+      "name": "client",
+      "project": "project"
+    }
 }

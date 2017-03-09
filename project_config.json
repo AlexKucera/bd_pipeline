@@ -1,0 +1,52 @@
+{ 
+	"project": {
+		"name": "Unnamed",
+		"format": {
+			"width": 1920,
+			"height": 1080,
+			"fps": 25
+		},
+		"deliverables": ["ProRes4444", "JPEG"]
+	},
+	"numbering": {
+	    "sequence digits": 3,
+	    "shot digits": 4,
+	    "version digits": 2
+	},
+	"scenes": {
+		"parent folder": "work",
+		"app": {
+			"modo": "modo",
+			"Maya": "maya",
+			"Nuke": "nuke",
+			"Fusion": "fusion",
+			"After Effects": "after_effects",
+			"Photoshop": "paint",
+			"Affinity": "paint"
+		},
+		"3d task": {
+			"modelling": "01_model",
+			"animation": "02_animation",
+			"shading": "03_shading",
+			"lighting": "04_lighting",
+			"rendering": "05_rendering"
+		},
+		"2D task": {
+			"roto": "01_roto",
+			"paint": "02_paint",
+			"tracking": "03_tracking",
+			"comp": "04_comp"
+		}
+	},
+	"images": {
+		"parent folder": "img",
+		"3d": "cg",
+		"comp": "comps",
+		"edit": "edit",
+		"textures": "textures",
+		"playblasts": "cg/previews"
+	},
+	"temp folder": "temp",
+	"client data": "io/client/from",
+	"deliveries": "io/client/to"
+}
