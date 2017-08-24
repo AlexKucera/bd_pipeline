@@ -37,6 +37,16 @@ from vars import *
 
 # FUNCTIONS -----------------------------------------------
 class QueryDict(dict):
+    """
+    Creates a Dictionary that is browseable by path.
+
+    Example:
+
+        query_dict = {'key': {'subkey': 'value'}}
+
+        print query_dict['key/subkey']
+
+    """
     def __getitem__(self, key_string):
         current = self
         try:
