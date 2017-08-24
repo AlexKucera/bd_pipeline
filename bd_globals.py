@@ -157,9 +157,7 @@ def bdconfig():
     with open(CONFIG_PATH) as json_data:
         bab_vars = QueryDict(json.load(json_data))
 
-    bab_vars['projects dir'] = "{drive}{sep}{projects}{sep}".format(drive=bab_vars['project drive'],
-                                                                   projects=bab_vars['projects location'],
-                                                                   sep=os.sep)
+    bab_vars['projects dir'] = os.path.join(bab_vars['project drive'], bab_vars['projects location'],"")
 
     return bab_vars
 
@@ -174,11 +172,12 @@ def projectconfig(filepath):
     project = find_project(filepath)
     bdconfigs = bdconfig()
 
+    global_project_config = os.path.join(os.path.dirname(CONFIG_PATH), bdconfigs['project config name'])
     if project is None:
         project_config = "{}{}".format(CONFIG_PATH, bdconfigs['project config name'])
 
     else:
-        project_config = "{}{}{}".format(project['project_dir'], os.sep, bdconfigs['project config name'])
+        project_config = os.path.join(project['project_dir'], bdconfigs['project config name'])
 
     with open(project_config) as json_data:
         project_vars = QueryDict(json.load(json_data))
