@@ -12,6 +12,20 @@ Release Notes:
 
 V0.1 Initial Release
 
+
+(\d+)(?:[,-](\d+))?(?:[,xX:](\d+))? # Catches simple positive number combinations
+
+(\d+)(?:\s)?(?:[,-](?:\s)?(\d+))?(?:\s)?(?:[,xX:](?:\s)?(\d+))? # Catches most positive number combinations.
+
+(-?\d+)(?:\s)?(?:[,-](?:\s)?(-?\d+))?(?:\s)?(?:[,xX:](?:\s)?(-?\d+))? # Catches most negative number combinations.
+
+http://sarge.readthedocs.io/en/latest/overview.html#what-is-sarge-for
+
+http://amoffat.github.io/sh/index.html
+
+http://plumbum.readthedocs.io/en/latest/
+
+
 """
 import os
 import json
@@ -23,6 +37,17 @@ from vars import *
 
 # FUNCTIONS -----------------------------------------------
 class QueryDict(dict):
+    """
+    Creates a Dictionary that is browseable by path.
+
+    Example:
+
+        query_dict = {'key': {'subkey': 'value'}}
+
+        print query_dict['key/subkey']
+
+    """
+
     def __getitem__(self, key_string):
         current = self
         try:
@@ -30,6 +55,7 @@ class QueryDict(dict):
                 current = dict.__getitem__(current, key)
             return current
         except (TypeError, KeyError):
+
             return None
 
 
@@ -76,13 +102,12 @@ def walk_up(bottom):
 
 
 def find_project(filepath):
-
     """
     Tries to find the project folder for any given file based on the global pipeline config.
     :param filepath:
     :return:
         None if no project was found
-        project (dict) containing project directory, project name and client name if a project was found.
+        A dict containing project directory, project name and client name if a project was found.
     """
 
     regex_string = "({0})([^/]+)/([^/]+)".format(bdconfig()['projects dir'])
@@ -101,19 +126,51 @@ def find_project(filepath):
         return None
 
 
+def find_shot_version(filepath):
+    """
+    Tries to find the version number for any given file based on the project config config.
+
+    :param filepath:
+    :return:
+        None if no project was found
+        A dict containing the sequence, shot, version number and shot/file name.
+
+    """
+
+    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
+        projectconfig(filepath)['numbering/sequence digits'],
+        projectconfig(filepath)['numbering/shot digits'],
+        projectconfig(filepath)['numbering/version digits']
+    )
+
+    regex = re.compile(regex_string)
+    match = re.match(regex, filepath)
+    if match:
+        shotname = match.group(1).rstrip('_ -')
+        return {'sequence': match.group(2), 'shot': match.group(3), 'version': match.group(4), 'shotname': shotname}
+
+
 def bdconfig():
     """
     Returns a dictionary with found global pipeline data based on the global project definitions.
 
-    :return: babvars (dict)
+    :return: babvars (dict) which at the time of writing contains:
+        project drive,
+        projects location,
+        pipeline location,
+        project config name,
+        clients:
+            name,
+            project
+    }
+
+
     """
 
     with open(CONFIG_PATH) as json_data:
         bab_vars = QueryDict(json.load(json_data))
 
-    bab_vars['projects dir'] = "{drive}{sep}{projects}{sep}".format(drive=bab_vars['project drive'],
-                                                                   projects=bab_vars['projects location'],
-                                                                   sep=os.sep)
+    bab_vars['projects dir'] = os.path.join(bab_vars['project drive'], bab_vars['projects location'], "")
 
     return bab_vars
 
@@ -123,20 +180,88 @@ def projectconfig(filepath):
     Returns a dictionary with found project data based on the global project definitions.
     If a valid project path is found it tries to reads it's project config. If none exists the global config is used.
     :param filepath:
-    :return: projectvars (dict)
+    :return: projectvars (dict) which at the time of writing contains:
+            project:
+                name
+                format:
+                    width
+                    height
+                    fps
+                deliverables
+
+            numbering:
+                sequence digits
+                shot digits
+                version digits
+
+            scenes:
+                parent folder
+                app:
+                    modo
+                    Maya
+                    Nuke
+                    Fusion
+                    After Effects
+                    Photoshop
+                    Affinity
+                3d task:
+                    modelling
+                    animation
+                    shading
+                    lighting
+                    rendering
+                2D task:
+                    roto
+                    paint
+                    tracking
+                    comp
+
+            images:
+                parent folder
+                3d
+                comp
+                edit
+                textures
+                playblasts
+
+            temp folder
+            client data
+            deliveries
     """
     project = find_project(filepath)
     bdconfigs = bdconfig()
 
+    global_project_config = os.path.join(os.path.dirname(CONFIG_PATH), bdconfigs['project config name'])
     if project is None:
-        project_config = "{}{}".format(CONFIG_PATH, bdconfigs['project config name'])
+
+        project_config = global_project_config
 
     else:
-        project_config = "{}{}{}".format(project['project_dir'], os.sep, bdconfigs['project config name'])
+        project_config = os.path.join(project['project_dir'], bdconfigs['project config name'])
+        if not os.path.exists(project_config):
+            project_config = global_project_config
 
     with open(project_config) as json_data:
         project_vars = QueryDict(json.load(json_data))
 
     return project_vars
 
+
 # END FUNCTIONS -----------------------------------------------
+
+
+def main():
+    """
+    Simply run help if called directly.
+    """
+    # import __main__
+    # help(__main__)
+
+
+# end main
+
+# __all__ = ['MyDummyClass', 'my_dummy_function']
+
+if __name__ == '__main__':
+    print find_project(
+        '/Volumes/ProjectsRaid/WorkingProjects/peri/peri-2015_001-sperrholz/work/modo/05_render/sperrholz_10_v03.lxo')
