@@ -47,6 +47,7 @@ class QueryDict(dict):
         print query_dict['key/subkey']
 
     """
+
     def __getitem__(self, key_string):
         current = self
         try:
@@ -101,13 +102,12 @@ def walk_up(bottom):
 
 
 def find_project(filepath):
-
     """
     Tries to find the project folder for any given file based on the global pipeline config.
     :param filepath:
     :return:
         None if no project was found
-        project (dict) containing project directory, project name and client name if a project was found.
+        A dict containing project directory, project name and client name if a project was found.
     """
 
     regex_string = "({0})([^/]+)/([^/]+)".format(bdconfig()['projects dir'])
@@ -128,12 +128,14 @@ def find_project(filepath):
 
 def find_shot_version(filepath):
     """
-        Tries to find the version number for any given file based on the global pipeline config.
-        :param filepath:
-        :return:
-            None if no project was found
-            project (dict) containing project directory, project name and client name if a project was found.
-        """
+    Tries to find the version number for any given file based on the project config config.
+
+    :param filepath:
+    :return:
+        None if no project was found
+        A dict containing the sequence, shot, version number and shot/file name.
+
+    """
 
     regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
         projectconfig(filepath)['numbering/sequence digits'],
@@ -152,13 +154,23 @@ def bdconfig():
     """
     Returns a dictionary with found global pipeline data based on the global project definitions.
 
-    :return: babvars (dict)
+    :return: babvars (dict) which at the time of writing contains:
+        project drive,
+        projects location,
+        pipeline location,
+        project config name,
+        clients:
+            name,
+            project
+    }
+
+
     """
 
     with open(CONFIG_PATH) as json_data:
         bab_vars = QueryDict(json.load(json_data))
 
-    bab_vars['projects dir'] = os.path.join(bab_vars['project drive'], bab_vars['projects location'],"")
+    bab_vars['projects dir'] = os.path.join(bab_vars['project drive'], bab_vars['projects location'], "")
 
     return bab_vars
 
@@ -168,7 +180,53 @@ def projectconfig(filepath):
     Returns a dictionary with found project data based on the global project definitions.
     If a valid project path is found it tries to reads it's project config. If none exists the global config is used.
     :param filepath:
-    :return: projectvars (dict)
+    :return: projectvars (dict) which at the time of writing contains:
+            project:
+                name
+                format:
+                    width
+                    height
+                    fps
+                deliverables
+
+            numbering:
+                sequence digits
+                shot digits
+                version digits
+
+            scenes:
+                parent folder
+                app:
+                    modo
+                    Maya
+                    Nuke
+                    Fusion
+                    After Effects
+                    Photoshop
+                    Affinity
+                3d task:
+                    modelling
+                    animation
+                    shading
+                    lighting
+                    rendering
+                2D task:
+                    roto
+                    paint
+                    tracking
+                    comp
+
+            images:
+                parent folder
+                3d
+                comp
+                edit
+                textures
+                playblasts
+
+            temp folder
+            client data
+            deliveries
     """
     project = find_project(filepath)
     bdconfigs = bdconfig()
@@ -183,11 +241,11 @@ def projectconfig(filepath):
         if not os.path.exists(project_config):
             project_config = global_project_config
 
-
     with open(project_config) as json_data:
         project_vars = QueryDict(json.load(json_data))
 
     return project_vars
+
 
 # END FUNCTIONS -----------------------------------------------
 
@@ -196,13 +254,14 @@ def main():
     """
     Simply run help if called directly.
     """
-    #import __main__
-    #help(__main__)
+    # import __main__
+    # help(__main__)
 
 
 # end main
 
-#__all__ = ['MyDummyClass', 'my_dummy_function']
+# __all__ = ['MyDummyClass', 'my_dummy_function']
 
 if __name__ == '__main__':
-    print find_project('/Volumes/ProjectsRaid/WorkingProjects/peri/peri-2015_001-sperrholz/work/modo/05_render/sperrholz_10_v03.lxo')
+    print find_project(
+        '/Volumes/ProjectsRaid/WorkingProjects/peri/peri-2015_001-sperrholz/work/modo/05_render/sperrholz_10_v03.lxo')
