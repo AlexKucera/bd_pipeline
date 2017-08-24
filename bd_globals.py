@@ -125,6 +125,28 @@ def find_project(filepath):
         return None
 
 
+def find_shot_version(filepath):
+    """
+        Tries to find the version number for any given file based on the global pipeline config.
+        :param filepath:
+        :return:
+            None if no project was found
+            project (dict) containing project directory, project name and client name if a project was found.
+        """
+
+    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
+        projectconfig(filepath)['numbering/sequence digits'],
+        projectconfig(filepath)['numbering/shot digits'],
+        projectconfig(filepath)['numbering/version digits']
+    )
+
+    regex = re.compile(regex_string)
+    match = re.match(regex, filepath)
+    if match:
+        shotname = match.group(1).rstrip('_ -')
+        return {'sequence': match.group(2), 'shot': match.group(3), 'version': match.group(4), 'shotname': shotname}
+
+
 def bdconfig():
     """
     Returns a dictionary with found global pipeline data based on the global project definitions.
