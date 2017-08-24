@@ -12,6 +12,20 @@ Release Notes:
 
 V0.1 Initial Release
 
+
+(\d+)(?:[,-](\d+))?(?:[,xX:](\d+))? # Catches simple positive number combinations
+
+(\d+)(?:\s)?(?:[,-](?:\s)?(\d+))?(?:\s)?(?:[,xX:](?:\s)?(\d+))? # Catches most positive number combinations.
+
+(-?\d+)(?:\s)?(?:[,-](?:\s)?(-?\d+))?(?:\s)?(?:[,xX:](?:\s)?(-?\d+))? # Catches most negative number combinations.
+
+http://sarge.readthedocs.io/en/latest/overview.html#what-is-sarge-for
+
+http://amoffat.github.io/sh/index.html
+
+http://plumbum.readthedocs.io/en/latest/
+
+
 """
 import os
 import json
