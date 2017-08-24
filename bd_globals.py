@@ -174,10 +174,14 @@ def projectconfig(filepath):
 
     global_project_config = os.path.join(os.path.dirname(CONFIG_PATH), bdconfigs['project config name'])
     if project is None:
-        project_config = "{}{}".format(CONFIG_PATH, bdconfigs['project config name'])
+
+        project_config = global_project_config
 
     else:
         project_config = os.path.join(project['project_dir'], bdconfigs['project config name'])
+        if not os.path.exists(project_config):
+            project_config = global_project_config
+
 
     with open(project_config) as json_data:
         project_vars = QueryDict(json.load(json_data))
