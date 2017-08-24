@@ -154,6 +154,41 @@
 <h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h1>
 <p>I am not a trained programmer and I usually don&#8217;t have much time to code. So be prepared for ugly code, quick hacks and stuff that is half finished. You have been warned.</p>
 </div>
+<div class="section" id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h1>
+<p>This module is meant as a pipeline wide glue between applicaitons. It allows querying project information such as a project&#8217;s name or a file&#8217;s version number by simply providing a file path.</p>
+<p>There are at the moment four main functions defined:</p>
+<blockquote>
+<div><ul class="simple">
+<li>bdconfig</li>
+<li>projectconfig</li>
+<li>find_project</li>
+<li>find_shot_version</li>
+</ul>
+</div></blockquote>
+<div class="section" id="bdconfig">
+<h2>bdconfig<a class="headerlink" href="#bdconfig" title="Permalink to this headline">¶</a></h2>
+<p>Usage: <cite>bdconfig()</cite></p>
+<p>Looks at the global <cite>global_config.json</cite> that lives in this modules directory. It contains facility wide global settings like the path to projects and other global paths.</p>
+</div>
+<div class="section" id="projectconfig">
+<h2>projectconfig<a class="headerlink" href="#projectconfig" title="Permalink to this headline">¶</a></h2>
+<p>Usage: <cite>projectconfig(filepath)</cite></p>
+<p>First it tries to find a file called <cite>project_config.json</cite> inside a provided path&#8217;s project structure. If it is unable to find such a file (or project structure) it will resort to reading the default <a href="#id1"><span class="problematic" id="id2">`</span></a>project_config.json`that is in this module&#8217;s directory. This function returns project specific details such as frame rates, project name or which folders are to be found where inside the project folder.</p>
+</div>
+<div class="section" id="find-project">
+<h2>find_project<a class="headerlink" href="#find-project" title="Permalink to this headline">¶</a></h2>
+<p>Usage: <cite>find_project(filepath)</cite></p>
+<p>Give it a file path and it will find the project this path belongs to.</p>
+<p>It will return a dictionary containing project directory, project name and client name if a project was found.</p>
+</div>
+<div class="section" id="find-shot-version">
+<h2>find_shot_version<a class="headerlink" href="#find-shot-version" title="Permalink to this headline">¶</a></h2>
+<p>Usage: <cite>find_shot_version(filepath)</cite></p>
+<p>Tries to find the version number for any given file based on the project config.</p>
+<p>Returns a dictionary with the sequence, shot, version number and shot/file name.</p>
+</div>
+</div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
