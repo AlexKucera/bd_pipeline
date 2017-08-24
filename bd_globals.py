@@ -54,6 +54,7 @@ class QueryDict(dict):
                 current = dict.__getitem__(current, key)
             return current
         except (TypeError, KeyError):
+
             return None
 
 
@@ -189,3 +190,19 @@ def projectconfig(filepath):
     return project_vars
 
 # END FUNCTIONS -----------------------------------------------
+
+
+def main():
+    """
+    Simply run help if called directly.
+    """
+    #import __main__
+    #help(__main__)
+
+
+# end main
+
+#__all__ = ['MyDummyClass', 'my_dummy_function']
+
+if __name__ == '__main__':
+    print find_project('/Volumes/ProjectsRaid/WorkingProjects/peri/peri-2015_001-sperrholz/work/modo/05_render/sperrholz_10_v03.lxo')
