@@ -1,5 +1,6 @@
 {
     "project drive": "/Volumes/ProjectsRaid",
+    "alt drive": "Z:\\AzureSync\\CloudComputing\\",
     "projects location": "WorkingProjects",
 	"pipeline location": "x_Pipeline",
     "project config name": "project_config.json",

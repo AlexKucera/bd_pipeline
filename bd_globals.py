@@ -27,9 +27,7 @@ http://plumbum.readthedocs.io/en/latest/
 
 
 """
-import os
 import json
-
 import re
 
 from vars import *

@@ -15,6 +15,8 @@ import os
 # Config
 
 CONFIG_PATH = '/Volumes/ProjectsRaid/x_Pipeline/x_AppPlugins/bd_pipeline/'
+if not os.path.exists(CONFIG_PATH):
+    CONFIG_PATH = os.path.dirname(__file__)
 CONFIG_NAME = 'global_config.json'
 
 # Automated Stuff.  No Touchy!
