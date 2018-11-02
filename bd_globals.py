@@ -108,7 +108,7 @@ def find_project(filepath):
         A dict containing project directory, project name and client name if a project was found.
     """
 
-    regex_string = "({0})([^/]+)/([^/]+)".format(bdconfig()['projects dir'])
+    regex_string = "({0})([^/]+)\/([^/]+)".format(bdconfig()['projects dir'])
     regex = re.compile(regex_string)
     match = re.match(regex, filepath)
 
