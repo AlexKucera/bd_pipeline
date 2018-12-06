@@ -135,9 +135,10 @@ def find_shot_version(filepath):
 
     """
 
-    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
+    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{},{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
         projectconfig(filepath)['numbering/sequence digits'],
         projectconfig(filepath)['numbering/shot digits'],
+        projectconfig(filepath)['numbering/shot digits'] + 1,
         projectconfig(filepath)['numbering/version digits']
     )
 
