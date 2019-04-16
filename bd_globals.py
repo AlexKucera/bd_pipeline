@@ -108,7 +108,7 @@ def find_project(filepath):
         A dict containing project directory, project name and client name if a project was found.
     """
 
-    regex_string = "({0})([^/]+)\/([^/]+)".format(bdconfig()['projects dir'])
+    regex_string = "({0})([^/]+)/([^/]+)".format(bdconfig()['projects dir'])
     regex = re.compile(regex_string)
     match = re.match(regex, filepath)
 
@@ -135,7 +135,7 @@ def find_shot_version(filepath):
 
     """
 
-    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{},{}}})_.*)v(\d{{{}}})(.*)(\.[a-zA-Z].+)'.format(
+    regex_string = '.*(([a-zA-Z0-9]{{{}}})_([a-zA-Z0-9]{{{},{}}})_.*)v(\d{{{}}})(.*)([.][a-zA-Z].+)'.format(
         projectconfig(filepath)['numbering/sequence digits'],
         projectconfig(filepath)['numbering/shot digits'],
         projectconfig(filepath)['numbering/shot digits'] + 1,
